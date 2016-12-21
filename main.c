@@ -235,36 +235,61 @@ static void OnRequestComplete(RIL_Token t, RIL_Errno e, void *response, size_t r
 
 // OnUnsolicitedResponse
 static void OnUnsolicitedResponse(int unsolResponse, const void *data, size_t datalen) {
-//    switch (unsolResponse) {
-//        case RIL_UNSOL_SIGNAL_STRENGTH:
-//            original_environment.OnUnsolicitedResponse(unsolResponse, data, datalen);
-//            return;
-//        default:
-//            break;
-//    }
-//
-//    bool root = is_enable("OnUnsolicitedResponse");
-//    if (root) {
-//        RLOGD("adapter begin OnUnsolicitedResponse\n");
-//    }
-//
-//    if (root) {
-//        RLOGD("adapter response is [%s] \n", requestToString(unsolResponse));
-//    }
-//    switch (unsolResponse) {
-//        case RIL_UNSOL_RESPONSE_NEW_SMS: {
-//
-//        }
-//            break;
-//        default:
-//            break;
-//    }
+   /* switch (unsolResponse) { */
+   /*     case RIL_UNSOL_SIGNAL_STRENGTH: */
+   /*         original_environment.OnUnsolicitedResponse(unsolResponse, data, datalen); */
+   /*         return; */
+   /*     default: */
+   /*         break; */
+   /* } */
 
-    original_environment.OnUnsolicitedResponse(unsolResponse, data, datalen);
-//
-//    if (root) {
-//        RLOGD("adapter end OnUnsolicitedResponse\n");
-//    }
+   RIL_Data_Call_Response_v6 *r, *mydata;
+   int i,j;
+
+   mydata = data;
+
+   bool root = is_enable("OnUnsolicitedResponse");
+   if (root) {
+       RLOGD("adapter begin OnUnsolicitedResponse\n");
+   }
+
+   /* if (unsolResponse == RIL_UNSOL_DATA_CALL_LIST_CHANGED) { */
+   /*     RLOGD("Hook: DATA_CALL_LIST_CHANGED, datalen = %d", datalen); */
+   /*     if (datalen > sizeof(RIL_Data_Call_Response_v6)) { */
+   /*         i = datalen / sizeof(RIL_Data_Call_Response_v6); */
+   /*         for (j = 0; j < i; j++) { */
+   /*             r = &((RIL_Data_Call_Response_v6*)data)[j]; */
+   /*             if (strcmp(r->ifname, "rmnet1") == 0) { */
+   /*                 mydata = (RIL_Data_Call_Response_v6*)malloc(sizeof(RIL_Data_Call_Response_v6)); */
+   /*                 memcpy(mydata, r, sizeof(RIL_Data_Call_Response_v6)); */
+   /*                 mydata->cid = 0; */
+   /*                 break; */
+   /*             } */
+                   
+   /*         } */
+               
+   /*         RLOGD("Hook replace RESPONSE!!!"); */
+   /*         datalen = sizeof(RIL_Data_Call_Response_v6); */
+   /*     } */
+   /* } */
+
+   if (root) {
+       RLOGD("adapter response is [%s] \n", requestToString(unsolResponse));
+   }
+   /* switch (unsolResponse) { */
+   /*     case RIL_UNSOL_RESPONSE_NEW_SMS: { */
+
+   /*     } */
+   /*         break; */
+   /*     default: */
+   /*         break; */
+   /* } */
+
+    original_environment.OnUnsolicitedResponse(unsolResponse, mydata, datalen);
+
+   if (root) {
+       RLOGD("adapter end OnUnsolicitedResponse\n");
+   }
 }
 
 // RequestTimedCallback
@@ -462,6 +487,7 @@ static bool is_enable(const char *key) {
     bool enable = true;
     for (int i = 0; i < length; ++i) {
         KEY_VALUE_PAIR pair = properties_arraylist[i];
+        LOGT("key = %s, value = %s", pair.key, pair.value);
         if (strcasecmp(key, pair.key) == 0) {
             int v = atoi(pair.value);
             if (v == 0) {

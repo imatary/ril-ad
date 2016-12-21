@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_OSX_SYSROOT "")
 
 set(CMAKE_SYSTEM_NAME Android)
 set(CMAKE_SYSTEM_PROCESSOR arm)
-set(tool_root /Users/mbp/andorid-toolchains/android-9-clang3.5-toolchains)
+
+set(tool_root /home/hitmoon/arm-linux-androideabi-4.8)
 set(CMAKE_SYSROOT ${tool_root}/sysroot)
 
 set(CMAKE_C_COMPILER ${tool_root}/bin/arm-linux-androideabi-clang)

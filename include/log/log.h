@@ -327,8 +327,8 @@ extern "C" {
 #endif
 
 #ifndef RLOGI_IF
-#define RLOGI_IF(cond, ...) \RLOGI
-    ( (CONDITION(cond)) \
+#define RLOGI_IF(cond, ...) \
+    ( (CONDITION(cond))     \
     ? ((void)__android_log_buf_print(LOG_ID_RADIO, ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)) \
     : (void)0 )
 #endif
